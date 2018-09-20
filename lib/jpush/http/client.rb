@@ -83,6 +83,8 @@ module JPush
       # if raise Timeout::Error retry it for 3 times
       rescue Net::OpenTimeout, Net::ReadTimeout => e
         (tries -= 1).zero? ? (raise Utils::Exceptions::TimeOutError.new(e)) : retry
+      rescue EOFError
+        (tries -= 1) <= 1 ? (raise Utils::Exceptions::TimeOutError.new(e)) : retry
       end
 
       private
